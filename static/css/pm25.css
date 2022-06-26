@@ -1,0 +1,50 @@
+.date {
+    background-color: navy;
+    color: white;
+    display: inline-block;
+    padding: 6px;
+    border-radius: 6px;
+}
+
+body {
+    background-color: rgb(255, 254, 245);
+}
+
+#container {
+    width: 80%;
+    margin: 16px auto;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    margin: 0px auto;
+}
+
+th {
+    background-color: coral;
+    font-size: 20px;
+}
+
+td {
+    background-color: aquamarine;
+}
+
+@media screen and (max-width:768px) {
+    #container {
+        width: 100%;
+    }
+
+    table {
+        width: 90%;
+    }
+}
+
+input[type="submit"] {
+    margin-bottom: 6px;
+    background-color: chartreuse;
+    border: 0px;
+    border-radius: 6px;
+    width: 60px;
+    height: 30px;
+}
