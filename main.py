@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template, request
 from datetime import datetime
 from scrape.pm25 import get_pm25
@@ -13,6 +14,23 @@ def index(name='GUEST'):
     return render_template('./index.html', today=today, name=name)
 
 
+@app.route('/pm25-json', methods=['GET'])
+def pm25_json():
+    columns, values = get_pm25(False)
+
+    stationName = [value[1] for value in values]
+    result = [value[2] for value in values]
+
+    data = {'stationName': stationName, 'result': result}
+
+    return json.dumps(data, ensure_ascii=False)
+
+
+@app.route('/pm25-chart')
+def pm25_chart():
+    return render_template('./pm25-chart.html')
+
+
 @app.route('/pm25', methods=['GET', 'POST'])
 def pm25():
     sort = False
@@ -20,8 +38,6 @@ def pm25():
     if(request.method == 'POST'):
         if request.form.get('sort'):
             sort = True
-        # if request.form.get('update'):
-        #     sort=False
 
     today = get_today()
     columns, values = get_pm25(sort)
