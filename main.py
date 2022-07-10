@@ -1,7 +1,7 @@
-import json
 from flask import Flask, render_template, request
 from datetime import datetime
-from scrape.pm25 import get_pm25
+from scrape.pm25 import get_pm25, get_six_pm25, get_all_city, get_city_pm25
+import json
 
 app = Flask(__name__)
 
@@ -14,6 +14,20 @@ def index(name='GUEST'):
     return render_template('./index.html', today=today, name=name)
 
 
+@app.route('/city-pm25/<city>', methods=['GET'])
+def pm25_city_json(city):
+    stationName, result = get_city_pm25(city)
+
+    return json.dumps({'stationName': stationName, 'result': result}, ensure_ascii=False)
+
+
+@app.route('/six-pm25-json', methods=['POST'])
+def pm25_six_json():
+    six_citys, result = get_six_pm25()
+
+    return json.dumps({'citys': six_citys, 'result': result}, ensure_ascii=False)
+
+
 @app.route('/pm25-json', methods=['GET', 'POST'])
 def pm25_json():
     columns, values = get_pm25(False)
@@ -21,14 +35,15 @@ def pm25_json():
     stationName = [value[1] for value in values]
     result = [value[2] for value in values]
 
-    data = {'stationName': stationName, 'result': result}
+    data = {'date': get_today(), 'stationName': stationName, 'result': result}
 
     return json.dumps(data, ensure_ascii=False)
 
 
 @app.route('/pm25-chart')
 def pm25_chart():
-    return render_template('./pm25-chart.html')
+    citys = get_all_city()
+    return render_template('./pm25-chart-bulma.html', countys=citys)
 
 
 @app.route('/pm25', methods=['GET', 'POST'])
@@ -85,4 +100,5 @@ def get_today():
 
 
 if __name__ == '__main__':
+    # pm25_json()
     app.run(debug=True)

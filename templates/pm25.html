@@ -15,10 +15,14 @@
         <h1>PM2.5全台資訊</h1>
         <p class="date">目前時間:{{today}}</p>
         <form action="/pm25" method="POST">
-            <input type="submit" name="sort" value="排序"></input>
+            <input type="submit" name="sort" id="sort" value="排序"></input>
             <input type="submit" name="update" value="更新"></input>
         </form>
         {%if values%}
+        <div style="text-align:left">
+            <a href="/">首頁</a>
+            <a href="/pm25-chart">圖表</a>
+        </div>
         <table border="1">
             <thead>
                 <tr>

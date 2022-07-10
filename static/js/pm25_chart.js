@@ -1,118 +1,79 @@
 const mainEl = document.querySelector("#main");
+const sixEl = document.querySelector("#six");
+
+const pm25HighSite = document.querySelector("#pm25_high_site");
+const pm25HighValue = document.querySelector("#pm25_high_value");
+const pm25LowSite = document.querySelector("#pm25_low_site");
+const pm25LowValue = document.querySelector("#pm25_low_value");
+
+let chart1 = echarts.init(mainEl);
+let chart2 = echarts.init(sixEl);
 
 $(document).ready(() => {
   drawPM25();
 });
 
+function renderMaxPM25(datas) {
+  const result = datas["result"];
+  const stationName = datas["stationName"];
+
+  let maxIndex = result.indexOf(Math.max(...result));
+  let minIndex = result.indexOf(Math.min(...result));
+
+  pm25HighSite.innerText = stationName[maxIndex];
+  pm25HighValue.innerText = result[maxIndex];
+  pm25LowSite.innerText = stationName[minIndex];
+  pm25LowValue.innerText = result[minIndex];
+
+  console.log(maxIndex, minIndex);
+}
+
 function drawPM25() {
+  pm25HighSite.innerText = "更新中";
+  pm25HighValue.innerText = "N/A";
+  pm25LowSite.innerText = "更新中";
+  pm25LowValue.innerText = "N/A";
+
+  chart1.showLoading();
   $.ajax({
     url: "/pm25-json",
     type: "POST",
     dataType: "json",
     success: (data) => {
+      chart1.hideLoading();
       console.log(data);
-      drawChart_1(data);
-      // drawChart_2(data);
+      $("#date").text(data["date"]);
+      drawChart1(data);
+      renderMaxPM25(data);
+      drawSixPM25();
     },
     error: () => {
+      chart1.hideLoading();
       alert("error!");
     },
   });
 }
 
-function drawChart_2(data2) {
-  var chartDom = document.getElementById("main");
-  var myChart = echarts.init(chartDom);
-  var option;
-
-  // prettier-ignore
-  let dataAxis = data2['stationName'];
-  // prettier-ignore
-  let data = data2['result'];
-  let yMax = 500;
-  let dataShadow = [];
-  for (let i = 0; i < data.length; i++) {
-    dataShadow.push(yMax);
-  }
-  option = {
-    title: {
-      text: "特性示例：渐变色 阴影 点击缩放",
-      subtext: "Feature Sample: Gradient Color, Shadow, Click Zoom",
+function drawSixPM25() {
+  chart2.showLoading();
+  $.ajax({
+    url: "/six-pm25-json",
+    type: "POST",
+    dataType: "json",
+    success: (data) => {
+      chart2.hideLoading();
+      console.log(data);
+      drawChart2(data);
     },
-
-    xAxis: {
-      data: dataAxis,
-      axisLabel: {
-        inside: true,
-        color: "#000",
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLine: {
-        show: false,
-      },
-      z: 10,
+    error: () => {
+      chart2.hideLoading();
+      alert("讀取六都數據錯誤!");
     },
-    yAxis: {
-      axisLine: {
-        show: false,
-      },
-      axisTick: {
-        show: false,
-      },
-      axisLabel: {
-        color: "#999",
-      },
-    },
-    dataZoom: [
-      {
-        type: "inside",
-      },
-    ],
-    series: [
-      {
-        type: "bar",
-        showBackground: true,
-        itemStyle: {
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            { offset: 0, color: "#83bff6" },
-            { offset: 0.5, color: "#188df0" },
-            { offset: 1, color: "#188df0" },
-          ]),
-        },
-        emphasis: {
-          itemStyle: {
-            color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-              { offset: 0, color: "#2378f7" },
-              { offset: 0.7, color: "#2378f7" },
-              { offset: 1, color: "#83bff6" },
-            ]),
-          },
-        },
-        data: data,
-      },
-    ],
-  };
-  // Enable data zoom when user click bar.
-  const zoomSize = 6;
-  myChart.on("click", function (params) {
-    console.log(dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)]);
-    myChart.dispatchAction({
-      type: "dataZoom",
-      startValue: dataAxis[Math.max(params.dataIndex - zoomSize / 2, 0)],
-      endValue:
-        dataAxis[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)],
-    });
   });
-
-  option && myChart.setOption(option);
 }
 
 // 繪製一般柱狀圖
-function drawChart_1(data) {
-  let myChart = echarts.init(mainEl);
-  // 指定图表的配置项和数据
+function drawChart1(data) {
   let option = {
     title: {
       text: "PM2.5數據圖",
@@ -132,7 +93,7 @@ function drawChart_1(data) {
       trigger: "axis",
     },
     legend: {
-      data: ["站點"],
+      data: ["PM2.5"],
     },
     xAxis: {
       data: data["stationName"],
@@ -146,6 +107,30 @@ function drawChart_1(data) {
       },
     ],
   };
-  // 使用刚指定的配置项和数据显示图表。
-  myChart.setOption(option);
+
+  chart1.setOption(option);
+}
+
+function drawChart2(data) {
+  let option = {
+    legend: {
+      data: ["PM2.5"],
+    },
+    xAxis: {
+      data: data["citys"],
+    },
+    yAxis: {},
+    series: [
+      {
+        itemStyle: {
+          color: "#800080",
+        },
+        name: "PM2.5",
+        type: "bar",
+        data: data["result"],
+      },
+    ],
+  };
+
+  chart2.setOption(option);
 }

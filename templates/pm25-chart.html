@@ -15,36 +15,24 @@
 <body>
     <div id="container">
         <h1>全台PM2.5即時資訊</h1>
-        <div id="pm25_high_site" class="banner">
-            N/A
-        </div>
+        <div id="pm25_high_site" class="banner">N/A</div>
         <div id="pm25_high_value" class="value"> PM2.5 :數值</div>
-        <div id="pm25_low_site" class="banner">
-            N/A
-        </div>
+        <div id="pm25_low_site" class="banner">N/A</div>
         <div id="pm25_low_value" class="value"> PM2.5 :數值</div>
     </div>
 
-    <p id="date">
-        更新時間:取得中...
-    </p>
+    <p id="date">更新時間:取得中...</p>
 
-    <button class="button">
-        更新資料
-    </button>
+    <button class="button" onclick="drawPM25()">更新資料</button>
 
 
     <!-- 繪製區域 -->
-    <div id="main" style="width: 100%;height:500px;">
-    </div>
+    <div id="main" style="width: 100%;height:500px;"></div>
 
-    <div id="six" style="width: 100%;height:400px;">
-
-    </div>
+    <div id="six" style="width: 100%;height:400px;"></div>
 
     <a href="/">回首頁</a>
-    <script src="../static/js/pm25_chart.js">
-    </script>
+    <script src="../static/js/pm25_chart.js"></script>
 </body>
 
 </html>
