@@ -14,7 +14,7 @@ def index(name='GUEST'):
     return render_template('./index.html', today=today, name=name)
 
 
-@app.route('/city-pm25/<city>', methods=['GET'])
+@app.route('/city-pm25/<city>', methods=['POST'])
 def pm25_city_json(city):
     stationName, result = get_city_pm25(city)
 
