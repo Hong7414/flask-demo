@@ -14,7 +14,7 @@ def index(name='GUEST'):
     return render_template('./index.html', today=today, name=name)
 
 
-@app.route('/pm25-json', methods=['GET'])
+@app.route('/pm25-json', methods=['GET', 'POST'])
 def pm25_json():
     columns, values = get_pm25(False)
 

@@ -5,48 +5,46 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PM2.5數據圖</title>
-    <script src="https://cdn.bootcdn.net/ajax/libs/echarts/5.0.2/echarts.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <style>
-        #main {
-            width: 800px;
-            height: 400px;
-        }
-    </style>
+    <title>Document</title>
+    <link rel="shortcut icon" href="#">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.2.2/echarts.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/css/main.css">
 </head>
 
 <body>
-    <h1>PM2.5數據圖</h1>
-    <div id="main"></div>
-    <script>
-        //初始化eharts物件
-        const mainEl = document.querySelector("#main");
-        let myChart = echarts.init(mainEl);
+    <div id="container">
+        <h1>全台PM2.5即時資訊</h1>
+        <div id="pm25_high_site" class="banner">
+            N/A
+        </div>
+        <div id="pm25_high_value" class="value"> PM2.5 :數值</div>
+        <div id="pm25_low_site" class="banner">
+            N/A
+        </div>
+        <div id="pm25_low_value" class="value"> PM2.5 :數值</div>
+    </div>
 
-        let option = {
-            title: {
-                text: 'PM2.5 數據圖'
-            },
-            tooltip: {},
-            legend: {
-                data: ['销量']
-            },
-            xAxis: {
-                data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-            },
-            yAxis: {},
-            series: [
-                {
-                    name: '销量',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20]
-                }
-            ]
-        };
-        chart.setOption(option);
+    <p id="date">
+        更新時間:取得中...
+    </p>
+
+    <button class="button">
+        更新資料
+    </button>
+
+
+    <!-- 繪製區域 -->
+    <div id="main" style="width: 100%;height:500px;">
+    </div>
+
+    <div id="six" style="width: 100%;height:400px;">
+
+    </div>
+
+    <a href="/">回首頁</a>
+    <script src="../static/js/pm25_chart.js">
     </script>
-
 </body>
 
 </html>
